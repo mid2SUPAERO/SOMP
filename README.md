@@ -2,7 +2,7 @@
 Solid Orthotropic Material with Penalisation
 
 <img src="Images/OutPost.jpg" alt="SOMP" width="500"/>
-<img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="500"/>
+
 
 
 The code is based on top99: less efficient, restricted to 2D.
@@ -50,6 +50,11 @@ similar to TOP99 FE.m
 
 ## myOutputFcn.m
 needed for output of the objective function
+
+## Postprocessing
+Convolution filter to smooth fiber orientation
+
+<img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="500"/>
 
 
 ## TOP GO FURTHER
