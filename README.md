@@ -18,8 +18,8 @@ function [dcn]=check(nelx,nely,rmin,x,dc) : top99 MESH-INDEPENDENCY FILTER
 
 function [cneq, ceq, gradc, gradceq] = myConstrFcn(x) : output nonlinear constraints and derivative
 
-function [KE,dKE]=lkOd(angle); CLT for 1-layer composite membrane fully integrated Ke (8x8 matrix), and derivative with respect to angle, called in FE.m
-with fixed material
+function [KE,dKE]=lkOd(angle); CLT for 1-layer composite membrane fully integrated KE(8x8 matrix), and derivative with respect to angle dKE, called in FE.m
+For a fixed material
 
 Ex=1;
 Ey=5;
@@ -40,7 +40,7 @@ integK_laminate.m is the symbolic integration of Ke for a fixed material
 
 function [U]=FE(nelx,nely,vol,ang,penal); output displacement as a function of 
 
-myOutputFcn.m needed for output of objective function
+myOutputFcn.m needed for output of the objective function
 
 
 
