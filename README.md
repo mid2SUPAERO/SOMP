@@ -60,7 +60,7 @@ Convolution filter to smooth fiber orientation
 <img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="400"/>
 
 
-## TOP GO FURTHER
+## TO GO FURTHER
 
 
 use top88.m for vectorization/speed/memory [demo](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/top88/topopt_3ptBENDING.html)
