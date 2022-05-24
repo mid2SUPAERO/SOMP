@@ -1,7 +1,7 @@
 # SOMP
 Solid Orthotropic Material with Penalisation
 
-<img src="Images/OutPost.jpg" alt="SOMP" width="500"/>
+<img src="Images/OutPost.jpg" alt="SOMP" width="400"/>
 
 
 
@@ -50,11 +50,13 @@ similar to TOP99 FE.m
 
 ## myOutputFcn.m
 needed for output of the objective function
+<img src="Images/Obj_Cant_0.5_30x20.jpg" alt="OBJ" width="400"/>
+
 
 ## Postprocessing
 Convolution filter to smooth fiber orientation
 
-<img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="500"/>
+<img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="400"/>
 
 
 ## TOP GO FURTHER
