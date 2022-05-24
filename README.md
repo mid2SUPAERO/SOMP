@@ -1,50 +1,63 @@
 # SOMP
 Solid Orthotropic Material with Penalisation
-<img src="Images/OutPost.jpg" width="100" 
+
+!
+<img src="Images/OutPost.jpg" alt="SOMP" width="500"/>
 
 The code is based on top99: less efficient, restricted to 2D.
 But More readable for beginners ;)
 
-## Tutorial 
+# Tutorial 
 
-main.m : main programm setup the optimization problem solved with fmincode
+## main.m
+main.m : main programm setup the constrained optimization problem and solve it with interior-point method (fmincon)
 
 x0 is the initial design vector x0 = [rho0(:);theta0(:)];
 global nelx nely vol volfrac ang angle  penal rmin % global variable
 
+## check.m
 function [dcn]=check(nelx,nely,rmin,x,dc) : top99 MESH-INDEPENDENCY FILTER
 
+## top_obj.m
 [c, dt]=top_obj(x) : output compliance c and dc/drho, dc/dtheta
 
+## myConstrFcn.m
 function [cneq, ceq, gradc, gradceq] = myConstrFcn(x) : output nonlinear constraints and derivative
 
+## lk0d.m
 function [KE,dKE]=lkOd(angle); CLT for 1-layer composite membrane fully integrated KE(8x8 matrix), and derivative with respect to angle dKE, called in FE.m
-For a fixed material
-
+Orthotropic equivalent function to TOP99 lk.m
+For a fixed material:
 Ex=1;
 Ey=5;
 nuxy = 0.3;
 nuyx = 0.3;
 
-
-function [KE,dKE]=lkOd_laminate(angle); CLT for 1-layer composite membrane fully integrated Ke (8x8 matrix), and derivative with respect to angle, called in FE.m
-with fixed material
-
-Ex=44.8e+03; % longitudinal Elastic modulus [MPa]
+## lk0d_laminate.m
+function [KE,dKE]=lkOd_laminate(angle); CLT for 1-layer composite membrane fully integrated Ke (8x8 matrix), and derivative with respect to angle, called in FE.m with fixed material: Ex=44.8e+03; % longitudinal Elastic modulus [MPa]
 Ey=4.2e+03; % transversal Elastic modulus [MPa]
 %Glt=1.9e+03; % Shear Modulus [MPa]
 nuxy=0.49; % Poisson ratio
 nuyx=nuxy*Ey/Ex;
 
-integK_laminate.m is the symbolic integration of Ke for a fixed material
+## integK_laminate.m
+Symbolic integration of Ke for a fixed material. Not used in Optimization
 
-function [U]=FE(nelx,nely,vol,ang,penal); output displacement as a function of 
+## FE.m
+function [U]=FE(nelx,nely,vol,ang,penal); output displacement as a function of the actual iteration (and x vector)
+similar to TOP99 FE.m
 
-myOutputFcn.m needed for output of the objective function
+## myOutputFcn.m
+needed for output of the objective function
 
 
+## TOP GO FURTHER
 
-
+use top88.m for vectorization/speed/memory [here](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/top88/topopt_3ptBENDING.html)
+use top88.m with fmincon to compare with this code
+use top88.m with MMA (need svanberg's files mmasub, subsolv) to see the ability of MMA to tackle 
+use to88.m with stress constrained and MMA [here](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/AdvancedTopOpt/StressBasedTopOpt.html)
+use top99neo.m with MMA for 3D problem [here](https://www.topopt.mek.dtu.dk/apps-and-software/new-99-line-topology-optimization-code-written-in-matlab)
 
 
 ## Bibliography
