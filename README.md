@@ -2,6 +2,7 @@
 Solid Orthotropic Material with Penalisation
 
 <img src="Images/OutPost.jpg" alt="SOMP" width="500"/>
+<img src="Images/DensityOrientationPost.jpg" alt="HEATMAP" width="500"/>
 
 
 The code is based on top99: less efficient, restricted to 2D.
