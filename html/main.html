@@ -1,0 +1,338 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>main</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-05-24"><meta name="DC.source" content="main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%%%% A 99 LINE TOPOLOGY OPTIMIZATION CODE BY OLE SIGMUND, JANUARY 2000 %%%</span>
+<span class="comment">%%%% A 142 LINE CODE MODIFIED FOR USE WITH ORTHOTROPIC MATERIALS %%%</span>
+<span class="comment">%function TopO(nelx,nely,volfrac,angle,penal,rmin);</span>
+<span class="comment">%The results IS HIGHLY SENSITIVE TO X0</span>
+<span class="comment">% INITIALIZE</span>
+clear <span class="string">all</span>; close <span class="string">all</span>;
+<span class="keyword">global</span> nelx nely vol volfrac ang angle  penal rmin
+
+<span class="comment">%to use as function remove % and clear all; close all; add end at the end</span>
+nelx=30; <span class="comment">%number of quad elements in X</span>
+nely=20; <span class="comment">% number of quad elements in Y</span>
+volfrac=0.35; <span class="comment">%constraint in volume</span>
+angle=0.01; <span class="comment">% to avoid 0 fiber aligned with 0 rad</span>
+penal=3; <span class="comment">%Penalization</span>
+rmin=1.5; <span class="comment">% filter</span>
+filt=3; <span class="comment">% convolution filter on orientation</span>
+<span class="comment">% better results when fibers are driven with limited orientation design bounds</span>
+UP=0.33; <span class="comment">% max bounds on fiber orientation [-pi/3, pi/3]</span>
+
+
+<span class="comment">% option for fmincon</span>
+option = optimoptions(<span class="string">'fmincon'</span>,<span class="string">'Algorithm'</span>,<span class="string">'interior-point'</span>,<span class="keyword">...</span>
+    <span class="string">'GradObj'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+<span class="string">'TolX'</span>,1E-10,<span class="keyword">...</span>
+<span class="string">'TolFun'</span>,1E-10,<span class="keyword">...</span>
+<span class="string">'PlotFcns'</span>,@optimplotfval,<span class="keyword">...</span>
+	<span class="string">'GradConstr'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+	<span class="string">'MaxFunctionEvaluations'</span>,2000);
+<span class="comment">%</span>
+c0 = volfrac;
+rho0 = volfrac*ones(nely,nelx);
+<span class="comment">%theta0 = angle*ones(nely,nelx); % could be default</span>
+
+
+<span class="comment">% works well for Cantilever Sym Beam</span>
+thetau=-1*pi/4*ones(round(nely/2),nelx);
+thetas=1*pi/4*ones(round(nely/2),nelx);
+
+
+theta0=[thetau;thetas];
+nele=nelx*nely;
+<span class="comment">% define phi (rotation about y axis)</span>
+<span class="comment">% offset = 0;</span>
+<span class="comment">% a = -offset/180*pi; b = offset/180*pi;</span>
+<span class="comment">% phi = a + (b-a)*rand(nele,1);</span>
+<span class="comment">% phi = reshape(phi,nely,nelx); %</span>
+
+
+<span class="comment">%The results IS HIGHLY SENSITIVE TO X0</span>
+
+x0 = [rho0(:);theta0(:)];
+lb = [1E-6*ones(length(rho0(:)),1);-pi*UP*ones(length(theta0(:)),1)];
+ub = [ones(length(rho0(:)),1);pi*UP*ones(length(theta0(:)),1)];
+<span class="comment">%</span>
+<span class="comment">% equality constraint</span>
+Aeq = [ones(1,length(rho0(:))) zeros(1,length(theta0(:)))];
+beq = nelx*nely*c0;
+<span class="comment">% fmincon % add @top_nonlcon (only for passive element)</span>
+x = fmincon(<span class="string">'top_obj'</span>,x0,[],[],Aeq,beq,lb,ub,[],option);
+
+
+<span class="comment">%</span>
+rho = x(1:length(x)/2); theta = x(length(x)/2+1:end);
+rho = reshape(rho,nely,nelx);
+theta = reshape(theta,nely,nelx);
+<span class="comment">% ielem1 = ielem((find(rho&gt;.5)),:); rho1 = rho(find(rho&gt;.5),:); theta1= theta(find(rho&gt;.5),:);</span>
+<span class="comment">%</span>
+[XC,YC]=meshgrid(1:nelx,1:nely);
+rho_plot = 1-rho(:,:); <span class="comment">% for imagesc</span>
+<span class="comment">%</span>
+[XC,YC]=meshgrid(1:nelx,1:nely);
+
+<span class="comment">% % PLOT DENSITIES and ORIENTATION as HEATMAP</span>
+figure(2);subplot(211);
+heatmap(rho);
+subplot(212);
+heatmap(rad2deg(theta));
+colormap(jet(512));
+
+<span class="comment">% % Threshold on density</span>
+thres_rho=double(rho&gt;0.3);
+
+<span class="comment">% % PLOT DENSITIES and ORIENTATION as IMAGE</span>
+figure(3)
+imagesc(thres_rho);
+colormap(jet(512));
+hold <span class="string">on</span>;
+quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,<span class="string">'y'</span>,<span class="string">'ShowArrowHead'</span>, false);axis <span class="string">equal</span>; axis <span class="string">tight</span>; axis <span class="string">off</span>;
+
+
+<span class="comment">% POSTPROCESSING</span>
+K = (1/(filt.^2))*ones(filt);
+theta = conv2(theta,K,<span class="string">'same'</span>);
+
+<span class="comment">% % PLOT DENSITIES and ORIENTATION as HEATMAP</span>
+figure(4);subplot(211);
+heatmap(rho);
+subplot(212);
+heatmap(rad2deg(theta));
+colormap(jet(512));
+
+<span class="comment">% % PLOT DENSITIES and ORIENTATION as IMAGE with POSTPROCESSING</span>
+thres_rho=double(rho&gt;0.3);
+
+figure(5)
+imagesc(thres_rho);
+colormap(jet(512));
+hold <span class="string">on</span>;
+quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,<span class="string">'y'</span>,<span class="string">'ShowArrowHead'</span>, false);axis <span class="string">equal</span>; axis <span class="string">tight</span>; axis <span class="string">off</span>;
+
+
+
+<span class="comment">% % dim must be odd</span>
+<span class="comment">% dim = 1;</span>
+<span class="comment">% sigma = dim/7;</span>
+<span class="comment">% filter = gaussian2d(dim,sigma);</span>
+<span class="comment">% dim = size(filter,1);</span>
+<span class="comment">% thetaOpt = padarray(theta,[floor(dim/2) floor(dim/2)],'symmetric','both');</span>
+<span class="comment">% thetaOpt = conv2(thetaOpt,filter,'valid');</span>
+<span class="comment">% %thetaOpt = reshape(thetaOpt,1,[]);</span>
+<span class="comment">%</span>
+<span class="comment">% figure(2)</span>
+<span class="comment">%  colormap(gray); imagesc(rho_plot); axis equal; axis tight; axis off;</span>
+<span class="comment">% hold on;</span>
+<span class="comment">%  quiver(XC, YC, cos(thetaOpt) , sin(thetaOpt),0.6,'r','ShowArrowHead', false);axis equal; axis tight; axis off;</span>
+<span class="comment">% %</span>
+</pre><pre class="codeoutput">
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the value of the step size tolerance and constraints are 
+satisfied to within the value of the constraint tolerance.
+
+</pre><img vspace="5" hspace="5" src="main_01.png" alt=""> <img vspace="5" hspace="5" src="main_02.png" alt=""> <img vspace="5" hspace="5" src="main_03.png" alt=""> <img vspace="5" hspace="5" src="main_04.png" alt=""> <img vspace="5" hspace="5" src="main_05.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%%% A 99 LINE TOPOLOGY OPTIMIZATION CODE BY OLE SIGMUND, JANUARY 2000 %%%
+%%%% A 142 LINE CODE MODIFIED FOR USE WITH ORTHOTROPIC MATERIALS %%% 
+%function TopO(nelx,nely,volfrac,angle,penal,rmin);
+%The results IS HIGHLY SENSITIVE TO X0
+% INITIALIZE
+clear all; close all;
+global nelx nely vol volfrac ang angle  penal rmin
+
+%to use as function remove % and clear all; close all; add end at the end
+nelx=30; %number of quad elements in X
+nely=20; % number of quad elements in Y
+volfrac=0.35; %constraint in volume
+angle=0.01; % to avoid 0 fiber aligned with 0 rad
+penal=3; %Penalization
+rmin=1.5; % filter
+filt=3; % convolution filter on orientation
+% better results when fibers are driven with limited orientation design bounds
+UP=0.33; % max bounds on fiber orientation [-pi/3, pi/3]
+
+
+% option for fmincon
+option = optimoptions('fmincon','Algorithm','interior-point',...
+    'GradObj','on',...
+'TolX',1E-10,...
+'TolFun',1E-10,...
+'PlotFcns',@optimplotfval,...
+	'GradConstr','on',...
+	'MaxFunctionEvaluations',2000);
+%
+c0 = volfrac;
+rho0 = volfrac*ones(nely,nelx); 
+%theta0 = angle*ones(nely,nelx); % could be default
+
+
+% works well for Cantilever Sym Beam
+thetau=-1*pi/4*ones(round(nely/2),nelx);
+thetas=1*pi/4*ones(round(nely/2),nelx);
+ 
+ 
+theta0=[thetau;thetas];
+nele=nelx*nely;
+% define phi (rotation about y axis) 
+% offset = 0;
+% a = -offset/180*pi; b = offset/180*pi;
+% phi = a + (b-a)*rand(nele,1); 
+% phi = reshape(phi,nely,nelx); %
+
+
+%The results IS HIGHLY SENSITIVE TO X0
+
+x0 = [rho0(:);theta0(:)];
+lb = [1E-6*ones(length(rho0(:)),1);-pi*UP*ones(length(theta0(:)),1)];
+ub = [ones(length(rho0(:)),1);pi*UP*ones(length(theta0(:)),1)];
+%
+% equality constraint
+Aeq = [ones(1,length(rho0(:))) zeros(1,length(theta0(:)))]; 
+beq = nelx*nely*c0;
+% fmincon % add @top_nonlcon (only for passive element) 
+x = fmincon('top_obj',x0,[],[],Aeq,beq,lb,ub,[],option); 
+
+
+%
+rho = x(1:length(x)/2); theta = x(length(x)/2+1:end); 
+rho = reshape(rho,nely,nelx); 
+theta = reshape(theta,nely,nelx);
+% ielem1 = ielem((find(rho>.5)),:); rho1 = rho(find(rho>.5),:); theta1= theta(find(rho>.5),:);
+%
+[XC,YC]=meshgrid(1:nelx,1:nely);
+rho_plot = 1-rho(:,:); % for imagesc
+%
+[XC,YC]=meshgrid(1:nelx,1:nely);
+
+% % PLOT DENSITIES and ORIENTATION as HEATMAP
+figure(2);subplot(211);
+heatmap(rho);
+subplot(212);
+heatmap(rad2deg(theta));
+colormap(jet(512));
+
+% % Threshold on density
+thres_rho=double(rho>0.3);
+
+% % PLOT DENSITIES and ORIENTATION as IMAGE
+figure(3)
+imagesc(thres_rho);
+colormap(jet(512));
+hold on;
+quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,'y','ShowArrowHead', false);axis equal; axis tight; axis off;
+ 
+ 
+% POSTPROCESSING 
+K = (1/(filt.^2))*ones(filt);
+theta = conv2(theta,K,'same');
+
+% % PLOT DENSITIES and ORIENTATION as HEATMAP
+figure(4);subplot(211);
+heatmap(rho);
+subplot(212);
+heatmap(rad2deg(theta));
+colormap(jet(512));
+
+% % PLOT DENSITIES and ORIENTATION as IMAGE with POSTPROCESSING
+thres_rho=double(rho>0.3);
+
+figure(5)
+imagesc(thres_rho);
+colormap(jet(512));
+hold on;
+quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,'y','ShowArrowHead', false);axis equal; axis tight; axis off;
+
+
+
+% % dim must be odd
+% dim = 1;
+% sigma = dim/7;
+% filter = gaussian2d(dim,sigma);
+% dim = size(filter,1);
+% thetaOpt = padarray(theta,[floor(dim/2) floor(dim/2)],'symmetric','both');
+% thetaOpt = conv2(thetaOpt,filter,'valid');
+% %thetaOpt = reshape(thetaOpt,1,[]);
+% 
+% figure(2)
+%  colormap(gray); imagesc(rho_plot); axis equal; axis tight; axis off;
+% hold on;
+%  quiver(XC, YC, cos(thetaOpt) , sin(thetaOpt),0.6,'r','ShowArrowHead', false);axis equal; axis tight; axis off;
+% %
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
