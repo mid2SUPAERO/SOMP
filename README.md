@@ -1,5 +1,7 @@
 # SOMP
 Solid Orthotropic Material with Penalisation
+
+![title](Images/OutPost.png)
 The code is based on top99: less efficient, restricted to 2D.
 But More readable for beginners ;)
 
