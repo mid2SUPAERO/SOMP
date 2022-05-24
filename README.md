@@ -53,11 +53,11 @@ needed for output of the objective function
 
 ## TOP GO FURTHER
 
-use top88.m for vectorization/speed/memory [here](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/top88/topopt_3ptBENDING.html)
-use top88.m with fmincon to compare with this code
-use top88.m with MMA (need svanberg's files mmasub, subsolv) to see the ability of MMA to tackle 
-use to88.m with stress constrained and MMA [here](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/AdvancedTopOpt/StressBasedTopOpt.html)
-use top99neo.m with MMA for 3D problem [here](https://www.topopt.mek.dtu.dk/apps-and-software/new-99-line-topology-optimization-code-written-in-matlab)
+use top88.m for vectorization/speed/memory [demo](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/top88/topopt_3ptBENDING.html)
+use top88_fmincon.m to compare with this code
+use top88_MMA.m with MMA (need svanberg's files mmasub, subsolv) to see the ability of MMA to tackle 
+use to88_heaviside_MMA.m for stress constrained and MMA [demo](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/AdvancedTopOpt/StressBasedTopOpt.html)
+use top99neo.m with MMA for 3D problem [code](https://www.topopt.mek.dtu.dk/apps-and-software/new-99-line-topology-optimization-code-written-in-matlab)
 
 
 ## Bibliography
