@@ -1,8 +1,8 @@
 # SOMP
 Solid Orthotropic Material with Penalisation
 
-!
 <img src="Images/OutPost.jpg" alt="SOMP" width="500"/>
+
 
 The code is based on top99: less efficient, restricted to 2D.
 But More readable for beginners ;)
@@ -61,6 +61,9 @@ use top99neo.m with MMA for 3D problem [code](https://www.topopt.mek.dtu.dk/apps
 
 
 ## Bibliography
+
+[Begineer's guide in FE with matlab and abaqus](https://mihanbana.com/dl/matlab-Abaqus-mihanbana.com.pdf)
+
 Topology and printing orientation optimization of orthotropic material for additive manufacturing
 https://yorkspace.library.yorku.ca/xmlui/handle/10315/38783
 
