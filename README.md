@@ -14,6 +14,7 @@ But More readable for beginners ;)
 main.m : main programm setup the constrained optimization problem and solve it with interior-point method (fmincon)
 
 x0 is the initial design vector x0 = [rho0(:);theta0(:)];
+
 global nelx nely vol volfrac ang angle  penal rmin % global variable
 
 ## check.m
@@ -28,6 +29,7 @@ function [cneq, ceq, gradc, gradceq] = myConstrFcn(x) : output nonlinear constra
 ## lk0d.m
 function [KE,dKE]=lkOd(angle); CLT for 1-layer composite membrane fully integrated KE(8x8 matrix), and derivative with respect to angle dKE, called in FE.m
 Orthotropic equivalent function to TOP99 lk.m
+
 For a fixed material:
 Ex=1;
 Ey=5;
@@ -35,7 +37,9 @@ nuxy = 0.3;
 nuyx = 0.3;
 
 ## lk0d_laminate.m
-function [KE,dKE]=lkOd_laminate(angle); CLT for 1-layer composite membrane fully integrated Ke (8x8 matrix), and derivative with respect to angle, called in FE.m with fixed material: Ex=44.8e+03; % longitudinal Elastic modulus [MPa]
+function [KE,dKE]=lkOd_laminate(angle); CLT for 1-layer composite membrane fully integrated Ke (8x8 matrix), and derivative with respect to angle, called in FE.m with fixed material:
+
+Ex=44.8e+03; % longitudinal Elastic modulus [MPa]
 Ey=4.2e+03; % transversal Elastic modulus [MPa]
 %Glt=1.9e+03; % Shear Modulus [MPa]
 nuxy=0.49; % Poisson ratio
