@@ -62,25 +62,6 @@ Convolution filter to smooth fiber orientation
 
 ## TOP GO FURTHER
 
-Thanks to a discussion with Edouard:
-
-consider cos and sin instead of orientation
-in top_obj line 5,6 :
-vol = x(1:length(x)/3); 
-cos = x((length(x)/3+1):2*(length(x)/3)); 
-sin = x((2*length(x)/3+1):end); 
-ang=arctan(sin./cos); % rad?
-
-
-in main line 36-56:
-cos0=ones(nely,nelx);
-sin0=ones(nely,nelx);
-x0 = [rho0(:);cos0(:);sin0(:)];
-lb = [1E-6*ones(length(rho0(:)),1);-1*ones(2*length(cos0(:)),1)];
-ub = [ones(length(rho0(:)),1);ones(2*length(cos0(:))1)];
-Aeq = [ones(1,length(rho0(:))) zeros(1,2*length(cos0(:)))]; 
-
-+ after x is updated....
 
 use top88.m for vectorization/speed/memory [demo](http://htmlpreview.github.io/?https://github.com/jomorlier/ALMcourse/blob/master/top88/topopt_3ptBENDING.html)
 
