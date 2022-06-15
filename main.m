@@ -3,7 +3,7 @@
 %function TopO(nelx,nely,volfrac,angle,penal,rmin);
 %The results IS HIGHLY SENSITIVE TO X0
 % INITIALIZE
-clear all; close all;
+clear all; close all;clc;
 global nelx nely vol volfrac ang angle  penal rmin
 
 %to use as function remove % and clear all; close all; add end at the end
@@ -127,13 +127,9 @@ quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,'y','ShowArrowHead', false);axi
 
 %% Kmeans clustering
 markers = ['o', '+', '*', 'x', 's', 'd', '^', 'v', '<', '>'];
-
 J = zeros(10, 1);
-
 for k = 1:10
-    
     [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
-    
     J(k) = sum(sumD);
 
 end
@@ -143,8 +139,9 @@ plot(1:10, J, 'LineWidth', 1, 'Marker', '*')
 title('Elbow plot of k-means objective function vs k')
 xlabel('k')
 ylabel('WCSS ( Within-Cluster Sum of Square )')
-saveas(gcf,'Q2a.png')
+saveas(gcf,'Elbow_plot.png')
 %%
+k = 4;
 markers = ['o', '+', '*', 'x', 's', 'd', '^', 'v', '<', '>'];
 markers_a = ['r', 'b', 'g', 'c', 'm', 'y'];
 [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
@@ -154,7 +151,6 @@ for i=1:k
     hold on
 end
 %%
-
 for k=2:4
     theta = reshape(theta,[600,1]);
     [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
@@ -168,7 +164,7 @@ for k=2:4
         quiver(XC(idx == i), YC(idx == i), cos((-theta(idx == i))) , sin((-theta(idx == i))),'off',markers_a(i),LineWidth=1.5);axis equal; axis tight; axis off;pause(1e-6);
         hold on
     end
-    saveas(gcf, strcat('TopOpt_',string(k),'.png'));
+    saveas(gcf, strcat('TopOpt_K',string(k),'.png'));
 end
 
 
