@@ -135,7 +135,7 @@ for k = 1:10
     [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
     
     J(k) = sum(sumD);
-
+    compass(cos((-theta(idx == i))),sin((-theta(idx == i))), markers(i))
 end
 
 figure 
@@ -146,26 +146,44 @@ ylabel('WCSS ( Within-Cluster Sum of Square )')
 saveas(gcf,'Q2a.png')
 %%
 markers = ['o', '+', '*', 'x', 's', 'd', '^', 'v', '<', '>'];
+% U_s = reshape(XC, [nelx*nely,1]);
+% V_s = reshape(YC, [nelx*nely,1]);
 markers_a = ['r', 'b', 'g', 'c', 'm', 'y'];
+theta = reshape(theta,[600,1]);
 [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
 figure
 for i=1:k
     compass(cos((-theta(idx == i))),sin((-theta(idx == i))), markers_a(i))
     hold on
 end
+
+figure(6)
+imagesc(thres_rho);
+colormap(jet(512));
+hold on;
+theta = reshape(theta,[20,30]);
+idx = reshape(idx,[20,30]);
+for i=1:k
+    quiver(XC(idx == i), YC(idx == i), cos((-theta(idx == i))) , sin((-theta(idx == i))),'off',markers_a(i),LineWidth=1.5);axis equal; axis tight; axis off;pause(1e-6);
+    hold on
+end
+
+
 %%
 
 for k=2:4
-    theta = reshape(theta,[600,1]);
     [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
+%     idx_reshape = reshape(idx,[nely,nelx]);
+%     idx_reshape = reshape(idx,[nelx,nely]);
+
+    %imagesc(von_mises_s); colormap(bone);axis equal; axis tight; axis off;pause(1e-6);
+    %hold on
     figure(6)
     imagesc(thres_rho);
     colormap(jet(512));
-    hold on;
-    theta = reshape(theta,[20,30]);
-    idx = reshape(idx,[20,30]);
+    hold on
     for i=1:k
-        quiver(XC(idx == i), YC(idx == i), cos((-theta(idx == i))) , sin((-theta(idx == i))),'off',markers_a(i),LineWidth=1.5);axis equal; axis tight; axis off;pause(1e-6);
+        quiver(XC(idx == i),YC(idx == i),cos((-theta(idx == i))),sin((-theta(idx == i))),0.6,'y','ShowArrowHead', false);axis equal; axis tight; axis off;
         hold on
     end
     saveas(gcf, strcat('TopOpt_',string(k),'.png'));
