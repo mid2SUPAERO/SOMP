@@ -125,47 +125,4 @@ quiver(XC, YC, cos((-theta)) , sin((-theta)),0.6,'y','ShowArrowHead', false);axi
 %  quiver(XC, YC, cos(thetaOpt) , sin(thetaOpt),0.6,'r','ShowArrowHead', false);axis equal; axis tight; axis off;
 % %
 
-%% Kmeans clustering
-markers = ['o', '+', '*', 'x', 's', 'd', '^', 'v', '<', '>'];
-J = zeros(10, 1);
-for k = 1:10
-    [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
-    J(k) = sum(sumD);
-
-end
-
-figure 
-plot(1:10, J, 'LineWidth', 1, 'Marker', '*')
-title('Elbow plot of k-means objective function vs k')
-xlabel('k')
-ylabel('WCSS ( Within-Cluster Sum of Square )')
-saveas(gcf,'Elbow_plot.png')
-%%
-k = 4;
-markers = ['o', '+', '*', 'x', 's', 'd', '^', 'v', '<', '>'];
-markers_a = ['r', 'b', 'g', 'c', 'm', 'y'];
-[idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
-figure
-for i=1:k
-    compass(cos((-theta(idx == i))),sin((-theta(idx == i))), markers_a(i))
-    hold on
-end
-%%
-for k=2:4
-    theta = reshape(theta,[600,1]);
-    [idx, C, sumD] = kmeans(theta, k, 'Start', 'sample', 'Replicates', 100);
-    figure(6)
-    imagesc(thres_rho);
-    colormap(jet(512));
-    hold on;
-    theta = reshape(theta,[20,30]);
-    idx = reshape(idx,[20,30]);
-    for i=1:k
-        quiver(XC(idx == i), YC(idx == i), cos((-theta(idx == i))) , sin((-theta(idx == i))),'off',markers_a(i),LineWidth=1.5);axis equal; axis tight; axis off;pause(1e-6);
-        hold on
-    end
-    saveas(gcf, strcat('TopOpt_K',string(k),'.png'));
-end
-
-
 
